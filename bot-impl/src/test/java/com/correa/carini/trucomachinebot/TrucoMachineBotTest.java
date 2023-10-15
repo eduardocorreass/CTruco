@@ -8,7 +8,8 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.bueno.spi.model.CardRank.ACE;
+import static com.bueno.spi.model.CardRank.*;
+import static com.bueno.spi.model.CardRank.SEVEN;
 import static com.bueno.spi.model.CardSuit.*;
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,5 +36,24 @@ public class TrucoMachineBotTest {
 
         boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
         assertFalse(decideIfRaises);
+    }
+
+    @Test
+    @DisplayName("Should raise if has zap and manilha")
+    void ShouldNotRaiseIfHasZapAndManilha() {
+        TrucoCard vira = TrucoCard.of(ACE, SPADES);
+        List<TrucoCard> cards = List.of(
+                TrucoCard.of(TWO, CLUBS),
+                TrucoCard.of(TWO, DIAMONDS),
+                TrucoCard.of(FIVE, HEARTS)
+        );
+
+        GameIntel.StepBuilder stepBuilder = GameIntel.StepBuilder.with()
+                .gameInfo(List.of(), List.of(), vira, 1)
+                .botInfo(cards, 0)
+                .opponentScore(0);
+
+        boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
+        assertTrue(decideIfRaises);
     }
 }
