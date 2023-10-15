@@ -50,7 +50,6 @@ public class TrucoMachineBot implements BotServiceProvider {
 
         if(hasZapCopas(intel)) return 1;
 
-
         if (hasZapManilha(intel)){
             int round = intel.getRoundResults().size();
 
@@ -59,7 +58,6 @@ public class TrucoMachineBot implements BotServiceProvider {
             // Se for a segunda rodada, aceito e peço 6
             if (round == 1) return 1;
         }
-
 
         //if (hasTwoManilhas(intel)) return 0;
 
@@ -128,7 +126,6 @@ public class TrucoMachineBot implements BotServiceProvider {
                 }
             }
         }
-
         return -1;
     }
 
