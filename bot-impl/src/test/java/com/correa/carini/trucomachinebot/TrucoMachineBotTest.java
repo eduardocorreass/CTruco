@@ -40,7 +40,7 @@ public class TrucoMachineBotTest {
 
     @Test
     @DisplayName("Should raise if has zap and manilha")
-    void ShouldNotRaiseIfHasZapAndManilha() {
+    void ShouldRaiseIfHasZapAndManilha() {
         TrucoCard vira = TrucoCard.of(ACE, SPADES);
         List<TrucoCard> cards = List.of(
                 TrucoCard.of(TWO, CLUBS),
