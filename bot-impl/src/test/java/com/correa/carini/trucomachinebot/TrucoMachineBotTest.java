@@ -24,4 +24,16 @@ public class TrucoMachineBotTest {
         boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
         assertFalse(decideIfRaises);
     }
+
+    @Test
+    @DisplayName("Should not raise if opponent score is equal to 11")
+    void ShouldNotRaiseIfOpponentScoreIsEqualTo11() {
+        GameIntel.StepBuilder stepBuilder = (GameIntel.StepBuilder) GameIntel.StepBuilder.with()
+                .gameInfo(List.of(), List.of(), TrucoCard.of(ACE, SPADES), 1)
+                .botInfo(List.of(), 0)
+                .opponentScore(11);
+
+        boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
+        assertFalse(decideIfRaises);
+    }
 }
