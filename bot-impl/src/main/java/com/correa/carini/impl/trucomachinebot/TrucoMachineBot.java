@@ -186,13 +186,11 @@ public class TrucoMachineBot implements BotServiceProvider {
         TrucoCard greatestCard = getGreatestCard(cards, vira);
 
         if(intel.getOpponentCard().isPresent()){
-            if(greatestCard.compareValueTo(intel.getOpponentCard().get(), vira) > 0){
+            if(greatestCard.compareValueTo(intel.getOpponentCard().get(), vira) > 0)
                 return getMinimalGreaterCard(cards, vira, intel.getOpponentCard().get());
-            }
 
             return getLowestCard(cards, vira);
         }
-
 
         return greatestCard;
     }
@@ -201,13 +199,21 @@ public class TrucoMachineBot implements BotServiceProvider {
         List<TrucoCard> cards = new ArrayList<>(intel.getCards());
         TrucoCard vira  = intel.getVira();
 
-        if(intel.getOpponentCard().isPresent()) {
-            TrucoCard minimalGreaterCard = getMinimalGreaterCard(cards, vira, intel.getOpponentCard().get());
+        if(intel.getRoundResults().get(0) == GameIntel.RoundResult.DREW) return getGreatestCard(cards, vira);
 
-            if(minimalGreaterCard != null) return minimalGreaterCard;
+        TrucoCard greatestCard = getGreatestCard(cards, vira);
+
+        if(intel.getOpponentCard().isPresent()){
+            if(greatestCard.compareValueTo(intel.getOpponentCard().get(), vira) > 0)
+                return getMinimalGreaterCard(cards, vira, intel.getOpponentCard().get());
+
+            if(greatestCard.relativeValue(vira) == intel.getOpponentCard().get().relativeValue((vira)))
+                return greatestCard;
+
+            return getLowestCard(cards, vira);
         }
 
-        return getLowestCard(cards, vira);
+        return greatestCard;
     }
 
     private TrucoCard getThirdRoundCard(GameIntel intel) {
