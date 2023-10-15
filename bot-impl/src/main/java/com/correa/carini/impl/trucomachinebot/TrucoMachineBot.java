@@ -37,6 +37,18 @@ public class TrucoMachineBot implements BotServiceProvider {
 
     @Override
     public boolean decideIfRaises(GameIntel intel) {
+        if(intel.getHandPoints() == 11) return false;
+
+        if(hasZapManilha(intel)) return true;
+
+        if(intel.getRoundResults().size() == 2 && intel.getOpponentCard().isPresent()){
+            if(intel.getCards().get(0).compareValueTo(intel.getOpponentCard().get(), intel.getVira()) > 0){
+                return true;
+            }
+        }
+
+        if(intel.getScore() - intel.getOpponentScore() >= 3 && hasManilhaAndThree(intel)) return true;
+
         return false;
     }
 
@@ -280,6 +292,22 @@ public class TrucoMachineBot implements BotServiceProvider {
 
         if (zap && manilhas >= 1) return true;
         return false;
+    }
+
+    private boolean hasManilhaAndThree(GameIntel intel) {
+        int manilhas = 0;
+        boolean hasThree = false;
+
+        for (TrucoCard card : intel.getCards()) {
+            if (card.getRank().equals(THREE)) {
+                hasThree = true;
+            }
+            if (card.isOuros(intel.getVira()) || card.isEspadilha(intel.getVira()) || card.isCopas(intel.getVira()) || card.isZap(intel.getVira())) {
+                manilhas += 1;
+            }
+        }
+
+        return hasThree && manilhas >= 1;
     }
 
     private TrucoCard getMinimalGreaterCard( List<TrucoCard> cards, TrucoCard vira, TrucoCard opponentCard){
