@@ -73,8 +73,10 @@ public class TrucoMachineBot implements BotServiceProvider {
                     return 0;
                 } else if (ternos.size() == 1 && duques.size() == 2) {
                     return 0;
+                } else {
+                    return -1;
                 }
-                return -1;
+
             }
 
             if (manilhas.size() == 1) {
@@ -91,11 +93,13 @@ public class TrucoMachineBot implements BotServiceProvider {
                             }
                         }
                     }
+                    return -1;
                 }
             }
             if (manilhas.size() == 2) return 0;
             if (manilhas.size() == 3) return 0;
         } else if (roundResults.size() == 1){
+
             if (roundResults.get(0).equals(GameIntel.RoundResult.LOST)) {
                 List<TrucoCard> manilhas = cards.stream().filter(card -> card.isManilha(vira)).toList();
 
@@ -109,6 +113,8 @@ public class TrucoMachineBot implements BotServiceProvider {
                         if (card.isZap(intel.getVira()) || card.isCopas(intel.getVira())) {
                             if (ternos.isPresent() || duques.isPresent()){
                                 return 0;
+                            } else{
+                                return -1;
                             }
                         }
                     }
@@ -116,7 +122,25 @@ public class TrucoMachineBot implements BotServiceProvider {
                 else if (manilhas.size() == 2) return 0;
                 else return -1;
             }
-        } else if (roundResults.size() == 1){
+            if (roundResults.get(0).equals(GameIntel.RoundResult.WON)) {
+                List<TrucoCard> manilhas = cards.stream().filter(card -> card.isManilha(vira)).toList();
+
+                if (manilhas.isEmpty()) {
+                    List<TrucoCard> ternos = cards.stream().filter(card -> card.getRank().equals(THREE)).toList();
+                    List<TrucoCard> duques = cards.stream().filter(card -> card.getRank().equals(TWO)).toList();
+                    if (ternos.size() > 0) {
+                        return 0;
+                    } else if (duques.size() > 0) {
+                        return 0;
+                    } else {
+                        return -1;
+                    }
+
+                } else{
+                    return 0;
+                }
+            }
+        } else if (roundResults.size() == 2){
             if (roundResults.get(0).equals(GameIntel.RoundResult.WON)){
                 List<TrucoCard> manilhas = cards.stream().filter(card -> card.isManilha(vira)).toList();
                 if (manilhas.isEmpty()) {
