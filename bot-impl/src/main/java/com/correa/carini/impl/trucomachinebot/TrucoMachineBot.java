@@ -158,21 +158,23 @@ public class TrucoMachineBot implements BotServiceProvider {
         return false;
     }
 
-    private boolean hasZapManilha(GameIntel intel){
+    private boolean hasZapManilha(GameIntel intel) {
         boolean zap = false;
         int manilhas = 0;
 
-        for (TrucoCard card : intel.getCards()){
-            if (card.isZap(intel.getVira())){
+        for (TrucoCard card : intel.getCards()) {
+            if (card.isZap(intel.getVira())) {
                 zap = true;
             }
-            if (card.isOuros(intel.getVira()) || card.isEspadilha(intel.getVira()) || card.isCopas(intel.getVira())){
+            if (card.isOuros(intel.getVira()) || card.isEspadilha(intel.getVira()) || card.isCopas(intel.getVira())) {
                 manilhas += 1;
             }
         }
 
         if (zap && manilhas >= 1) return true;
         return false;
+    }
+
     private TrucoCard getMinimalGreaterCard( List<TrucoCard> cards, TrucoCard vira, TrucoCard opponentCard){
         TrucoCard minimalGreaterCard = null;
 
