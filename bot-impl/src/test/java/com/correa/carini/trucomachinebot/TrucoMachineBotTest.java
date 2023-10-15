@@ -96,4 +96,22 @@ public class TrucoMachineBotTest {
         boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
         assertTrue(decideIfRaises);
     }
+
+    @Test
+    @DisplayName("Should not raise if score difference is lower than 3 and has low cards")
+    void ShouldNotRaiseIfScoreDifferenceIsLowerThan3AndHasLowCards() {
+        TrucoCard vira = TrucoCard.of(TWO, SPADES);
+        List<TrucoCard> card = List.of(
+                TrucoCard.of(SIX, DIAMONDS),
+                TrucoCard.of(FIVE, CLUBS)
+        );
+
+        GameIntel.StepBuilder stepBuilder = GameIntel.StepBuilder.with()
+                .gameInfo(List.of(), List.of(), vira, 1)
+                .botInfo(card, 2)
+                .opponentScore(0);
+
+        boolean decideIfRaises = new TrucoMachineBot().decideIfRaises(stepBuilder.build());
+        assertFalse(decideIfRaises);
+    }
 }
