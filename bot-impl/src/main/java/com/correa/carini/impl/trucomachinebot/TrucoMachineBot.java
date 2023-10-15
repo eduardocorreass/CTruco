@@ -296,6 +296,11 @@ public class TrucoMachineBot implements BotServiceProvider {
 
         return minimalGreaterCard;
     }
+
+    @Override
+    public String getName() {
+        return "Truco Machine";
+    }
 }
 
 
