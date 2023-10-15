@@ -10,14 +10,28 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static com.bueno.spi.model.CardRank.THREE;
-import static com.bueno.spi.model.CardRank.TWO;
+import static com.bueno.spi.model.CardRank.*;
 
 public class TrucoMachineBot implements BotServiceProvider {
 
-    private final List<CardRank> strongCards = List.of(CardRank.ACE, CardRank.TWO,CardRank.THREE);
+    //private final List<CardRank> strongCards = List.of(CardRank.ACE, CardRank.TWO,CardRank.THREE);
     @Override
     public boolean getMaoDeOnzeResponse(GameIntel intel) {
+        TrucoCard vira = intel.getVira();
+        List<TrucoCard> cards = intel.getCards();
+        List<TrucoCard> manilhas = cards.stream().filter(card -> card.isManilha(vira)).toList();
+        List<TrucoCard> strongCards = cards.stream().filter(card -> card.getRank().compareTo(KING) > 0 || card.isManilha(vira))
+                .toList();
+        if(intel.getOpponentScore()==11){
+            return true;
+        }
+        if(strongCards.size() == 3 && manilhas.size() > 0 && intel.getOpponentScore() <=7){
+            return true;
+        }
+        if (strongCards.size() == 3 && intel.getOpponentScore() >=7) {
+            return true;
+        }
+
         return false;
     }
 
@@ -216,9 +230,9 @@ public class TrucoMachineBot implements BotServiceProvider {
         return lowestCard;
     }
 
-    private boolean hasSrongCards(GameIntel intel){
+    /*private boolean hasSrongCards(GameIntel intel){
         return intel.getCards().stream().anyMatch(card -> strongCards.contains(card.getRank()));
-    }
+    }*/
 
     private boolean hasZapCopas(GameIntel intel){
         boolean zap = false;
