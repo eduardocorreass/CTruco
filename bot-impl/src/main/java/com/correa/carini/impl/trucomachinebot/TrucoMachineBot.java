@@ -26,6 +26,8 @@ public class TrucoMachineBot implements BotServiceProvider {
         CardToPlay cardToPlay = null;
 
         if(round == 0) cardToPlay = CardToPlay.of(getFirstRoundCard(intel));
+        if(round == 1) cardToPlay = CardToPlay.of(getSecondRoundCard(intel));
+        if(round == 2) cardToPlay = CardToPlay.of(getThirdRoundCard(intel));
 
 
 
@@ -45,7 +47,7 @@ public class TrucoMachineBot implements BotServiceProvider {
 
         if(intel.getOpponentCard().isPresent()){
             if(greatestCard.compareValueTo(intel.getOpponentCard().get(), vira) > 0){
-                return greatestCard;
+                return getMinimalGreaterCard(cards, vira, intel.getOpponentCard().get());
             }
 
             return getLowestCard(cards, vira);
@@ -53,6 +55,25 @@ public class TrucoMachineBot implements BotServiceProvider {
 
 
         return greatestCard;
+    }
+
+    private TrucoCard getSecondRoundCard(GameIntel intel) {
+        List<TrucoCard> cards = new ArrayList<>(intel.getCards());
+        TrucoCard vira  = intel.getVira();
+
+        if(intel.getOpponentCard().isPresent()) {
+            TrucoCard minimalGreaterCard = getMinimalGreaterCard(cards, vira, intel.getOpponentCard().get());
+
+            if(minimalGreaterCard != null) return minimalGreaterCard;
+        }
+
+        return getLowestCard(cards, vira);
+    }
+
+    private TrucoCard getThirdRoundCard(GameIntel intel) {
+        List<TrucoCard> cards = new ArrayList<>(intel.getCards());
+
+        return cards.get(0);
     }
 
     private TrucoCard getGreatestCard( List<TrucoCard> cards, TrucoCard vira){
@@ -79,5 +100,20 @@ public class TrucoMachineBot implements BotServiceProvider {
         }
 
         return lowestCard;
+    }
+
+    private TrucoCard getMinimalGreaterCard( List<TrucoCard> cards, TrucoCard vira, TrucoCard opponentCard){
+        TrucoCard minimalGreaterCard = null;
+
+        for (TrucoCard card : cards) {
+            int comparison = card.compareValueTo(opponentCard, vira);
+            if (comparison > 0) {
+                if (minimalGreaterCard == null || card.compareValueTo(minimalGreaterCard, vira) < 0) {
+                    minimalGreaterCard = card;
+                }
+            }
+        }
+
+        return minimalGreaterCard;
     }
 }
